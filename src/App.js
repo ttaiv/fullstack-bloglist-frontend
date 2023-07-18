@@ -1,20 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import Blog from './components/Blog';
+import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
+import BlogForm from './components/BlogForm';
 import blogService from './services/blogs';
-
-const Blogs = ({ user, blogs }) => {
-  if (!user) {
-    return null;
-  }
-  return (
-    <div>
-      <h2> Blogs </h2>
-      {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
-    </div>
-  );
-};
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -22,10 +11,11 @@ const App = () => {
   const [notification, setNotification] = useState(null);
 
   const keepUserLoggedIn = () => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
-    if (loggedUserJSON) {
-      const loggedUser = JSON.parse(loggedUserJSON);
+    const loggedUserText = window.localStorage.getItem('loggedBlogAppUser');
+    if (loggedUserText) {
+      const loggedUser = JSON.parse(loggedUserText);
       setUser(loggedUser);
+      blogService.setToken(loggedUser.token);
     }
   };
 
@@ -51,6 +41,7 @@ const App = () => {
   const handleLogOut = () => {
     window.localStorage.removeItem('loggedBlogAppUser');
     setUser(null);
+    blogService.setToken(null);
   };
 
   const logOutButton = () => (
@@ -71,6 +62,7 @@ const App = () => {
       {user && loggedInText()}
       {user && logOutButton()}
       <Blogs user={user} blogs={blogs} />
+      <BlogForm user={user} setNotification={setNotification} setBlogs={setBlogs} blogs={blogs} />
     </div>
   );
 };

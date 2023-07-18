@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
+import blogService from '../services/blogs';
 import loginService from '../services/login';
 
 const LoginForm = ({ user, setUser, displayNotification }) => {
@@ -18,6 +19,7 @@ const LoginForm = ({ user, setUser, displayNotification }) => {
       const newUser = await loginService.login(credentials);
       setUser(newUser);
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(newUser));
+      blogService.setToken(newUser.token);
       clearForm();
     } catch (exception) {
       displayNotification('Invalid username or password');
