@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import blogService from '../services/blogs';
 import loginService from '../services/login';
@@ -22,7 +21,7 @@ const LoginForm = ({ user, setUser, displayNotification }) => {
       blogService.setToken(newUser.token);
       clearForm();
     } catch (exception) {
-      displayNotification('Invalid username or password');
+      displayNotification('Wrong username or password');
     }
   };
 

@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import blogService from '../services/blogs';
 
 const BlogForm = ({
-  user, setNotification, setBlogs, blogs,
+  user, displayNotification, setBlogs, blogs,
 }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -22,8 +21,9 @@ const BlogForm = ({
       const addedBlog = await blogService.create(newBlog);
       setBlogs(blogs.concat(addedBlog));
       clearForm();
+      displayNotification(`A new blog ${addedBlog.title} by ${addedBlog.author} added.`);
     } catch (exception) {
-      setNotification(exception.response.data.error);
+      displayNotification(exception.response.data.error);
     }
   };
   if (!user) {

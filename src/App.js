@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
@@ -62,7 +61,7 @@ const App = () => {
       {user && loggedInText()}
       {user && logOutButton()}
       <Blogs user={user} blogs={blogs} />
-      <BlogForm user={user} setNotification={setNotification} setBlogs={setBlogs} blogs={blogs} />
+      <BlogForm user={user} displayNotification={display5secNotification} setBlogs={setBlogs} blogs={blogs} />
     </div>
   );
 };

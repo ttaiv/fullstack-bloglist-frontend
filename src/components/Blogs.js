@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-import PropTypes from 'prop-types';
-
 const Blog = ({ blog }) => (
   <div>
     {blog.title}
@@ -8,13 +5,6 @@ const Blog = ({ blog }) => (
     {blog.author}
   </div>
 );
-
-Blog.propTypes = {
-  blog: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 const Blogs = ({ user, blogs }) => {
   if (!user) {
