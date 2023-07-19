@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import blogService from '../services/blogs';
 
-const BlogForm = ({
-  user, displayNotification, setBlogs, blogs,
-}) => {
+const BlogForm = ({ addNewBlog }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -14,21 +11,13 @@ const BlogForm = ({
     setUrl('');
   };
 
-  const handleAddNew = async (event) => {
+  const handleAddNew = (event) => {
     event.preventDefault();
+    clearForm();
     const newBlog = { title, author, url };
-    try {
-      const addedBlog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(addedBlog));
-      clearForm();
-      displayNotification(`A new blog ${addedBlog.title} by ${addedBlog.author} added.`);
-    } catch (exception) {
-      displayNotification(exception.response.data.error);
-    }
+    addNewBlog(newBlog);
   };
-  if (!user) {
-    return null;
-  }
+
   return (
     <>
       <h2> Create a new entry </h2>

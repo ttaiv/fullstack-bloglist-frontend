@@ -2,7 +2,7 @@ import { useState } from 'react';
 import blogService from '../services/blogs';
 import loginService from '../services/login';
 
-const LoginForm = ({ user, setUser, displayNotification }) => {
+const LoginForm = ({ setUser, displayNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,9 +25,6 @@ const LoginForm = ({ user, setUser, displayNotification }) => {
     }
   };
 
-  if (user) {
-    return null;
-  }
   return (
     <div>
       <h2> Log in to application </h2>
