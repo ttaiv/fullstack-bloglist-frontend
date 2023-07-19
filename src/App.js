@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import { useState, useEffect, useRef } from 'react';
 import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
@@ -43,7 +44,7 @@ const App = () => {
   const addNewBlog = async (blog) => {
     try {
       const addedBlog = await blogService.create(blog);
-      addedBlog.user = { name: user.name }; // Replace user id with object that contain user name.
+      addedBlog.user = user;
       setBlogs(blogs.concat(addedBlog));
       display5secNotification(`A new blog ${addedBlog.title} by ${addedBlog.author} added.`);
       blogFormRef.current.toggleVisibility();
@@ -55,11 +56,23 @@ const App = () => {
   const like = async (targetBlog) => {
     const blogWithLike = { ...targetBlog, likes: targetBlog.likes + 1 };
     try {
-      const updatedBlog = await blogService.update(blogWithLike);
-      const updatedBlogs = blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog));
+      await blogService.update(blogWithLike);
+      const updatedBlogs = blogs.map((blog) => (blog.id === blogWithLike.id ? blogWithLike : blog));
       setBlogs(updatedBlogs);
     } catch (exception) {
       display5secNotification(exception.response.data.error);
+    }
+  };
+
+  const deleteBlog = async (targetBlog) => {
+    if (window.confirm(`Remove blog ${targetBlog.title} by ${targetBlog.author}?`)) {
+      try {
+        await blogService.deleteBlog(targetBlog);
+        const updatedBlogs = blogs.filter((blog) => blog.id !== targetBlog.id);
+        setBlogs(updatedBlogs);
+      } catch (exception) {
+        display5secNotification(exception.response.data.error);
+      }
     }
   };
 
@@ -91,7 +104,7 @@ const App = () => {
       <Togglable buttonLabel="Add blog" ref={blogFormRef}>
         <BlogForm addNewBlog={addNewBlog} />
       </Togglable>
-      <Blogs blogs={blogs} like={like} />
+      <Blogs blogs={blogs} like={like} deleteBlog={deleteBlog} user={user} />
     </>
   );
 };

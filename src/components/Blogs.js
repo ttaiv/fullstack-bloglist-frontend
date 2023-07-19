@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import _ from 'lodash';
 
+const DeleteButton = ({ blog, user, deleteBlog }) => {
+  const blogIsAddedByUser = user.username === blog.user.username;
+  const visibility = { display: blogIsAddedByUser ? '' : 'none' };
+
+  return (
+    <button type="button" onClick={() => deleteBlog(blog)} style={visibility}>
+      remove
+    </button>
+  );
+};
+
 const blogStyle = {
   paddingTop: '10px',
   paddingLeft: '2px',
@@ -10,13 +21,11 @@ const blogStyle = {
   borderRadius: '5px',
 };
 
-const Blog = ({ blog, like }) => {
+const Blog = ({
+  blog, like, deleteBlog, user,
+}) => {
   const [showAll, setShowAll] = useState(false);
   const toggleShowAll = () => setShowAll(!showAll);
-
-  const handleLike = () => {
-    like(blog);
-  };
 
   const titleAuthorButton = (
     <div>
@@ -41,21 +50,24 @@ const Blog = ({ blog, like }) => {
       {blog.url}
       <br />
       {`${blog.likes} `}
-      <button type="button" onClick={handleLike}>
+      <button type="button" onClick={() => like(blog)}>
         like
       </button>
       <br />
-      {blog.user.name}
+      {`Added by ${blog.user.name} `}
+      <DeleteButton blog={blog} deleteBlog={deleteBlog} user={user} />
     </div>
   );
 };
 
-const Blogs = ({ blogs, like }) => {
+const Blogs = ({
+  blogs, like, deleteBlog, user,
+}) => {
   const sortedBlogs = _.sortBy(blogs, (blog) => -blog.likes);
   return (
     <div>
       <h2> Blogs </h2>
-      {sortedBlogs.map((blog) => <Blog key={blog.id} blog={blog} like={like} />)}
+      {sortedBlogs.map((blog) => <Blog key={blog.id} blog={blog} like={like} deleteBlog={deleteBlog} user={user} />)}
     </div>
   );
 };
