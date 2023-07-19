@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import _ from 'lodash';
 
 const blogStyle = {
   paddingTop: '10px',
@@ -9,12 +10,12 @@ const blogStyle = {
   borderRadius: '5px',
 };
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
   const [showAll, setShowAll] = useState(false);
   const toggleShowAll = () => setShowAll(!showAll);
 
-  const handleLike = (title) => {
-    console.log('like for', title);
+  const handleLike = () => {
+    like(blog);
   };
 
   const titleAuthorButton = (
@@ -40,7 +41,7 @@ const Blog = ({ blog }) => {
       {blog.url}
       <br />
       {`${blog.likes} `}
-      <button type="button" onClick={() => handleLike(blog.title)}>
+      <button type="button" onClick={handleLike}>
         like
       </button>
       <br />
@@ -49,11 +50,14 @@ const Blog = ({ blog }) => {
   );
 };
 
-const Blogs = ({ blogs }) => (
-  <div>
-    <h2> Blogs </h2>
-    {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
-  </div>
-);
+const Blogs = ({ blogs, like }) => {
+  const sortedBlogs = _.sortBy(blogs, (blog) => -blog.likes);
+  return (
+    <div>
+      <h2> Blogs </h2>
+      {sortedBlogs.map((blog) => <Blog key={blog.id} blog={blog} like={like} />)}
+    </div>
+  );
+};
 
 export default Blogs;

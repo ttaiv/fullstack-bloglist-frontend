@@ -27,6 +27,12 @@ const App = () => {
       .then((receivedBlogs) => setBlogs(receivedBlogs));
   }, []);
 
+  const handleLogOut = () => {
+    window.localStorage.removeItem('loggedBlogAppUser');
+    setUser(null);
+    blogService.setToken(null);
+  };
+
   const display5secNotification = (text) => {
     setNotification(text);
     setTimeout(() => {
@@ -46,10 +52,15 @@ const App = () => {
     }
   };
 
-  const handleLogOut = () => {
-    window.localStorage.removeItem('loggedBlogAppUser');
-    setUser(null);
-    blogService.setToken(null);
+  const like = async (targetBlog) => {
+    const blogWithLike = { ...targetBlog, likes: targetBlog.likes + 1 };
+    try {
+      const updatedBlog = await blogService.update(blogWithLike);
+      const updatedBlogs = blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog));
+      setBlogs(updatedBlogs);
+    } catch (exception) {
+      display5secNotification(exception.response.data.error);
+    }
   };
 
   if (user === null) {
@@ -80,7 +91,7 @@ const App = () => {
       <Togglable buttonLabel="Add blog" ref={blogFormRef}>
         <BlogForm addNewBlog={addNewBlog} />
       </Togglable>
-      <Blogs blogs={blogs} />
+      <Blogs blogs={blogs} like={like} />
     </>
   );
 };
