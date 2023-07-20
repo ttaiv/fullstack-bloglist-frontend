@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 const DeleteButton = ({ blog, user, deleteBlog }) => {
   const blogIsAddedByUser = user.username === blog.user.username;
@@ -70,6 +71,20 @@ const Blogs = ({
       {sortedBlogs.map((blog) => <Blog key={blog.id} blog={blog} like={like} deleteBlog={deleteBlog} user={user} />)}
     </div>
   );
+};
+
+Blogs.propTypes = {
+  blogs: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string,
+    url: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+  }).isRequired).isRequired,
+  like: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Blogs;
