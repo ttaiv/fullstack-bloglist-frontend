@@ -29,13 +29,13 @@ const Blog = ({
   const toggleShowAll = () => setShowAll(!showAll);
 
   const titleAuthorButton = (
-    <div>
+    <>
       {`${blog.title} `}
       {`${blog.author} `}
       <button type="button" onClick={toggleShowAll}>
         {showAll ? 'hide' : 'view'}
       </button>
-    </div>
+    </>
   );
 
   if (!showAll) {
@@ -46,8 +46,9 @@ const Blog = ({
     );
   }
   return (
-    <div style={blogStyle}>
+    <div id="blog-container" style={blogStyle}>
       {titleAuthorButton}
+      <br />
       {blog.url}
       <br />
       {`${blog.likes} `}
