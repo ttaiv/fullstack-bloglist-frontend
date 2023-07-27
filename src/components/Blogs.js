@@ -40,13 +40,13 @@ const Blog = ({
 
   if (!showAll) {
     return (
-      <div style={blogStyle}>
+      <div id="blog-container" className="blog" style={blogStyle}>
         {titleAuthorButton}
       </div>
     );
   }
   return (
-    <div id="blog-container" style={blogStyle}>
+    <div id="blog-container" className="blog" style={blogStyle}>
       {titleAuthorButton}
       <br />
       {blog.url}

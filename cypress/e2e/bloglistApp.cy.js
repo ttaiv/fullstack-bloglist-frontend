@@ -92,12 +92,19 @@ describe('Blog app', function () {
       cy.contains('button', 'remove').should('be.visible');
     });
 
-    it.only('Blogs are ordered correctly by number of likes', function () {
+    it('Blogs are ordered correctly by number of likes', function () {
       cy.createBlog({ title: 'gggg', author: 'gggg', url: 'hhhh' }); // Add one more blog
       // Make it so that aaaa has 0 likes, dddd 2 likes and gggg 3 likes.
       cy.contains('dddd').contains('button', 'view').click();
       cy.contains('dddd').contains('button', 'like').as('ddddLike').click();
-      cy.contains('@ddddLike').click();
+      cy.get('@ddddLike').click();
+      cy.contains('gggg').contains('button', 'view').click();
+      cy.contains('gggg').contains('button', 'like').as('ggggLike').click();
+      cy.get('@ggggLike').click().click();
+      // Now check that order is gggg first, dddd second and aaaa last.
+      cy.get('.blog').eq(0).contains('gggg');
+      cy.get('.blog').eq(1).contains('dddd');
+      cy.get('.blog').eq(2).contains('aaaa');
     });
   });
 });
